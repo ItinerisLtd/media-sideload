@@ -1,5 +1,5 @@
 {
-    "name": "runcommand/media-sideload",
+    "name": "ItinerisLtd/media-sideload",
     "description": "Sideload embedded images, and update post content references.",
     "type": "wp-cli-package",
     "homepage": "https://runcommand.io/wp/media-sideload/",
@@ -9,6 +9,11 @@
             "name": "Daniel Bachhuber",
             "email": "daniel@runcommand.io",
             "homepage": "https://runcommand.io"
+        },
+        {
+            "name": "Jack Alexander",
+            "email": "jack.alexander@itineris.co.uk",
+            "homepage": "https://www.itineris.co.uk/"
         }
     ],
     "minimum-stability": "dev",
