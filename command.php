@@ -73,7 +73,7 @@ $run_sideload_media_command = function( $args, $assoc_args ) {
 
 			// Sometimes old content management systems put spaces in the URLs
 			$img_src = esc_url_raw( str_replace( ' ', '%20', $img->getAttribute( 'src' ) ) );
-			if ( ! empty( $assoc_args['domain'] ) && $assoc_args['domain'] != parse_url( $img_src, PHP_URL_HOST ) ) {
+            if ( ! empty( $assoc_args['domain'] ) && $assoc_args['domain'] != parse_url( $img_src, PHP_URL_SCHEME ) .'://'. parse_url( $img_src, PHP_URL_HOST ) ) {
 				continue;
 			}
 
