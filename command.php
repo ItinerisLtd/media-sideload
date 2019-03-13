@@ -100,14 +100,28 @@ $run_sideload_media_command = function( $args, $assoc_args ) {
 				continue;
 			}
 
-			// do the validation and storage stuff
-			$id = media_handle_sideload( $file_array, $post->ID );
-			// If error storing permanently, unlink
-			if ( is_wp_error( $id ) ) {
-				@unlink( $file_array['tmp_name'] );
-				WP_CLI::warning( $id->get_error_message() );
-				continue;
-			}
+            $img_sql = '%/' . $file_array['name'];
+            $sql = $wpdb->prepare(
+                "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s",
+                $img_sql
+            );
+            $existing_img = $wpdb->get_var( $sql ) !== null ? $wpdb->get_var( $sql ) : false;
+
+            // do the validation and storage stuff
+            if (! empty($existing_img)) {
+                WP_CLI::warning('Image already imported, using existing image!');
+                $id = $existing_img;
+            } else {
+                WP_CLI::warning('Image not already imported, importing now!');
+                $id = media_handle_sideload( $file_array, $post->ID );
+
+                // If error storing permanently, unlink
+                if ( is_wp_error( $id ) ) {
+                    @unlink( $file_array['tmp_name'] );
+                    WP_CLI::warning( $id->get_error_message() );
+                    continue;
+                }
+            }
 
 			$new_img = wp_get_attachment_image_src( $id, 'full' );
 			$post->post_content = str_replace( $img->getAttribute( 'src' ), $new_img[0], $post->post_content );
